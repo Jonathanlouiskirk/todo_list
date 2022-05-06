@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from todo.forms import TaskForm
-from todo.models import Task
+from todo.models import Task,Comment
 
 # Create your views here.
 
@@ -12,11 +12,12 @@ class TodoListView(View):
         '''GET the todo list homepage, listing all tasks in reverse order that they were created'''
         tasks = Task.objects.all().order_by('-id')
         task_form = TaskForm()
+        comments = Comment.objects.filter(task = tasks)
 
         return render(
             request=request,
             template_name='list.html',
-            context={'task_list': tasks, 'task_form': task_form},
+            context={'task_list': tasks, 'task_form': task_form, 'comments': comments}
         )
 
     def post(self, request):
